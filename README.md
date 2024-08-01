@@ -1,5 +1,38 @@
 # LLM response length prediction
 
+## Llama-Last-Layer-Tensor dataset:
+
+Prompt information file: `/data/weifan/lllt/profiling-Meta-Llama-3-8B-Instruct.json` can be parsed with
+
+```python
+with open('/data/weifan/lllt/profiling-Meta-Llama-3-8B-Instruct.json', 'r') as fin:
+    instruction = json.load(fin)
+
+records = instruction['records']
+records = records[1:]  # first entry
+```
+
+The `record` object is a 10K sized list. Each entry is formatted as follows:
+```
+{'record_id': 0,
+ 'start_ts': '2024-06-27 14:55:33.616826',
+ 'record_prompt': ...,
+ 'output': ...,
+ 'output_ts': '2024-06-27 14:55:39.891310',
+ 'iteration_count': 230,
+ 'iterations': [{'iter_id': 0,
+   'tensor_size': [1, 44, 4096],
+   'iter_ts': '2024-06-27 14:55:33.730154'},
+  {'iter_id': 1,
+   'tensor_size': [1, 1, 4096],
+   'iter_ts': '2024-06-27 14:55:33.744979'},
+   ...
+ ]
+}
+```
+
+`record_id` is the alpaca data prompt id. `iteration_count` is the total number of iterations. The `iterations` field is a list of dictionaries. The `iter_ts` field is a timestamp, and the embedding is located at `f'/data/weifan/lllt/llama_last_layer_tensor/{iter_ts}+.pt'`.
+
 ## DistilBert classification predictor
 
 From [S3](https://openreview.net/forum?id=zUYfbdNl1m&referrer=%5Bthe%20profile%20of%20Chun-Feng%20Wu%5D(%2Fprofile%3Fid%3D~Chun-Feng_Wu1)).
