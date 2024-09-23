@@ -1,32 +1,12 @@
-#/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 0
-#/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 1
-#/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 2
-#/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 3
-#/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 4
-#/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 5
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 6
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 7
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 8
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 9
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 10
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 11
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 12
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 13
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 14
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 15
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 16
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 17
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 18
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 19
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 20
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 21
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 22
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 23
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 24
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 25
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 26
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 27
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 28
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 29
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 30
-/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 31
+/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 10 --data_dir ../probing --output_dir ../probing/predictions --json_name llama3-10-15-5k.json --embedding_dir_name llama_layer10 --prompt True
+/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 11 --data_dir ../probing --output_dir ../probing/predictions --json_name llama3-10-15-5k.json --embedding_dir_name llama_layer10 --prompt True
+/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 12 --data_dir ../probing --output_dir ../probing/predictions --json_name llama3-10-15-5k.json --embedding_dir_name llama_layer10 --prompt True
+/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 13 --data_dir ../probing --output_dir ../probing/predictions --json_name llama3-10-15-5k.json --embedding_dir_name llama_layer10 --prompt True
+/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 14 --data_dir ../probing --output_dir ../probing/predictions --json_name llama3-10-15-5k.json --embedding_dir_name llama_layer10 --prompt True
+/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 15 --data_dir ../probing --output_dir ../probing/predictions --json_name llama3-10-15-5k.json --embedding_dir_name llama_layer10 --prompt True
+#/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 10 --data_dir ../probing --output_dir ../probing/predictions --json_name llama3-10-15-5k.json --embedding_dir_name llama_layer10
+#/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 11 --data_dir ../probing --output_dir ../probing/predictions --json_name llama3-10-15-5k.json --embedding_dir_name llama_layer10
+#/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 12 --data_dir ../probing --output_dir ../probing/predictions --json_name llama3-10-15-5k.json --embedding_dir_name llama_layer10
+#/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 13 --data_dir ../probing --output_dir ../probing/predictions --json_name llama3-10-15-5k.json --embedding_dir_name llama_layer10
+#/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 14 --data_dir ../probing --output_dir ../probing/predictions --json_name llama3-10-15-5k.json --embedding_dir_name llama_layer10
+#/home/weifan/anaconda3/envs/schedule/bin/python3 per_layer_classification.py --layer_idx 15 --data_dir ../probing --output_dir ../probing/predictions --json_name llama3-10-15-5k.json --embedding_dir_name llama_layer10

@@ -13,13 +13,15 @@ def main(
         layer_idx,
         data_dir = '../chunwei-data',
         output_dir='../chunwei-data/predictions',
-        num_labels=10, 
+        json_name='all_layers_1k.json',
+        embedding_dir_name='llama_layer10',
+        num_labels=10,
         prompt=False,
         seed=0,
-        use_cuda=True,
+        use_cuda=False,
     ):
 
-    with open(os.path.join(data_dir, 'all_layers_1k.json'), 'r') as fin:
+    with open(os.path.join(data_dir, json_name), 'r') as fin:
         record_info = json.load(fin)['records'][1:]
     
     split_file = os.path.join(data_dir, 'split', f'seed{seed}.json')
@@ -36,9 +38,15 @@ def main(
     
     os.system(f'mkdir -p {output_dir}')
 
+    if prompt:
+        print('Prediction based on averaged prompt embedding')
+    else:
+        print('Prediction based on last generated token')
+
     # load data from corresponding layer index
     X_train, Y_train, X_test, Y_test = list(), list(), list(), list()
     test_prompt_info = list()
+    incomplete_prompts = set()
     for record in tqdm.tqdm(record_info): 
         X, Y = list(), list()
         iters = record['iterations']
@@ -46,39 +54,53 @@ def main(
 
         if prompt:
 
-            # prediction based on averaged prompt embedding
-            if layer_idx < len(iters[0]['layers']):
-
-                layer_info = iters[0]['layers'][layer_idx]
+            layer_infos = [x for x in iters[0]['layers'] if x['layer_id'] == layer_idx]
+            if len(layer_infos) > 0:
+                layer_info = layer_infos[0]
+                assert(layer_info['layer_id'] == layer_idx)
                 layer_ts = layer_info['iter_ts']
 
-                tensor_path = os.path.join(data_dir, 'llama_layer_tensor', f'L{layer_idx}_{layer_ts}+.pt')
+                tensor_path = os.path.join(data_dir, embedding_dir_name, f'L{layer_idx}_{layer_ts}+.pt')
                 if os.path.isfile(tensor_path):
-                    tensor = torch.load(tensor_path)[0]
-                    avg_tensor = torch.mean(tensorm, dim=0)
-                    X.append(avg_tensor)
+                    tensor = torch.load(tensor_path)[0].cpu()
+                    avg_tensor = torch.mean(tensor, dim=0)
+                    X.append(torch.reshape(avg_tensor, (1, -1)))
                     Y.append(iteration_count - 1)
+                else:
+                    incomplete_prompts.add(record['record_id'])
 
         else:
 
             for iter_idx, iteration in enumerate(iters[1:]):
 
-                if layer_idx < len(iteration['layers']):
+                layer_infos = [x for x in iteration['layers'] if x['layer_id'] == layer_idx]
+                layer_info = None
+                if len(layer_infos) > 0:
+                    layer_info = layer_infos[0]
                 
-                    layer_info = iteration['layers'][layer_idx]
+                if layer_info is not None:
+                    assert layer_info['layer_id'] == layer_idx, f"record {record['record_id']}, iter {iter_idx}, actual layer id {layer_info['layer_id']}"
                     layer_ts = layer_info['iter_ts']
 
-                    tensor_path = os.path.join(data_dir, 'llama_layer_tensor', f'L{layer_idx}_{layer_ts}+.pt')
-                    if os.path.isfile(tensor_path):
-                        tensor = torch.load(tensor_path)[0]
-                        X.append(tensor)
-                        Y.append(iteration_count - 1 - 1 - iter_idx)
+                    tensor_path = os.path.join(data_dir, embedding_dir_name, f'L{layer_idx}_{layer_ts}+.pt')
+                    try:
+                        if os.path.isfile(tensor_path):
+                            tensor = torch.load(tensor_path)[0].cpu()
+                            X.append(tensor)
+                            Y.append(iteration_count - 1 - 1 - iter_idx)
+                        else:
+                            incomplete_prompts.add(record['record_id'])
+                    except:
+                        if os.path.isfile(tensor_path):
+                            print(tensor_path, "corrupted")
+                        continue
 
         if len(X) > 0:
             if len(X) > 1:
                 X = torch.cat(X, dim=0)
             else:
                 X = X[0]
+
             if record['record_id'] in split['train']:
                 X_train.append(X)
                 Y_train.extend(Y)
@@ -90,8 +112,7 @@ def main(
                     test_prompt_info.append({
                         'id': record['record_id'],
                         'remaining_steps': rs
-                    })
-        
+                    })  
     X_train_torch = torch.cat(X_train, dim=0).to(torch.float32)
     X_test_torch = torch.cat(X_test, dim=0).to(torch.float32)
 
