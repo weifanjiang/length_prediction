@@ -27,7 +27,7 @@ def main(model_path, num_labels, test_data_path, output_path):
     with torch.no_grad():
         for id, seq in zip(ids, texts):
             query = tokenizer(seq, truncation=True, padding='max_length', return_tensors='pt').to('cuda')
-            logits = model(**query).logits
+            logits = model(**query).logits                                                                                                                                                                                                                                                                                       
             logits_np = logits[0].detach().cpu().numpy().tolist()
 
             predictions.append({

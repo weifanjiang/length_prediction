@@ -11,14 +11,17 @@ from torch import nn, optim
 
 def main(
         layer_idx,
-        data_dir = '../chunwei-data',
-        output_dir='../chunwei-data/predictions',
-        json_name='all_layers_1k.json',
-        embedding_dir_name='llama_layer10',
+        data_dir,
+        output_dir=,
+        json_name=,
+        embedding_dir_name,
         num_labels=10,
         prompt=False,
         seed=0,
         use_cuda=False,
+        save_model=None,
+        save_data=None,
+        save_pred=True
     ):
 
     with open(os.path.join(data_dir, json_name), 'r') as fin:
@@ -128,6 +131,19 @@ def main(
     X_train_torch = X_train_torch[perm_idx]
     Y_train_torch = Y_train_torch[perm_idx]
 
+    if save_data is not None:
+        tensor_save_path = os.path.join(output_dir, save_data)
+        os.system(f'mkdir -p {tensor_save_path}')
+
+        fnames = ['X_train.pt', 'Y_train.pt', 'X_test.pt', 'Y_test.pt']
+        datas = [X_train_torch, Y_train_torch, X_test_torch, Y_test_torch]
+
+        for dtensor, fname in zip(datas, fnames):
+            torch.save(dtensor, os.path.join(tensor_save_path, fname))
+        
+        with open(os.path.join(tensor_save_path, 'test_prompt.json'), 'w') as fout:
+            json.dump(test_prompt_info, fout, indent=2)
+
     print('Train dim', X_train_torch.size(), Y_train_torch.size())
     print('Test dim', X_test_torch.size(), Y_test_torch.size())
 
@@ -192,8 +208,14 @@ def main(
                 else:
                     pstring = ""
 
-                with open(os.path.join(output_dir, f'L{layer_idx}_class{num_labels}{pstring}_seed{seed}.pkl'), 'wb') as fout:
-                    pkl.dump(test_prompt_info, fout)
+                if save_pred:
+                    with open(os.path.join(output_dir, f'L{layer_idx}_class{num_labels}{pstring}_seed{seed}.pkl'), 'wb') as fout:
+                        pkl.dump(test_prompt_info, fout)
+    
+    if save_model is not None:
+        os.system("mkdir -p {}".format(os.path.join(output_dir, save_model)))
+        model_path = os.path.join(output_dir, save_model, 'model.pth')
+        torch.save(model.state_dict(), model_path)
 
 if __name__ == '__main__':
     fire.Fire(main)
